@@ -1,17 +1,14 @@
 import React from 'react';
-import {
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
+import {Text, TouchableWithoutFeedback, View} from 'react-native';
 import styles from './styles';
 import FileItem from '../FileItem';
 import COLORS from '../../constants/colors';
 import Hr from '../Divider';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {TFile, TFileList} from '../../store/types/types';
-import fileList from '../../store/reducers/fileReducer';
+import {IFile, IFileList} from '../../constants/interfaces';
+import cancelAction from '../../store/actions/cancelAction';
+import retryAction from '../../store/actions/retryAction';
+import {useDispatch} from 'react-redux';
 
 /*
  * TODO
@@ -19,7 +16,30 @@ import fileList from '../../store/reducers/fileReducer';
  * To do this task is necessary to create a TouchableOpacity component that executes the animation of toggling the accordion.
  * It's not hard to implement but it will take me some time.
  * */
-export default function FileList({title, action, files, emptyText}: TFileList) {
+export default function FileList(fileList: IFileList) {
+  const {title, action, files, emptyText} = fileList;
+
+  const dispatch = useDispatch();
+
+  const cancel = (fileToCancel: IFile) => dispatch(cancelAction(fileToCancel));
+  const retry = (fileToUpload: IFile) => dispatch(retryAction(fileToUpload));
+
+  const handleActions = () => {
+    if (action === 'CANCEL UPLOAD') {
+      files.forEach(file => {
+        cancel(file);
+      });
+    }
+    if (action === 'RETRY All') {
+      files.forEach(file => {
+        retry(file);
+      });
+    }
+    if (action === 'DISMISS ALL') {
+      dispatch({type: 'DISMISS_ALL', payload: null});
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.accordionContainer}>
@@ -27,24 +47,21 @@ export default function FileList({title, action, files, emptyText}: TFileList) {
           <Text style={styles.title}>{title}</Text>
         </View>
         <View style={styles.accordionActions}>
-          <TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={() => handleActions()}>
             <Text style={styles.action}>{action}</Text>
           </TouchableWithoutFeedback>
-          <TouchableOpacity>
-            <Ionicons name="chevron-up-sharp" size={24} />
-          </TouchableOpacity>
+          <Ionicons name="chevron-up-sharp" size={24} />
         </View>
       </View>
       <Hr lineColor={COLORS.LIGHT_GRAY} />
-      {fileList.length > 0 ? (
+      {files.length > 0 ? (
         <View style={styles.fileList}>
-          {files?.map((file: TFile, index: number) => {
+          {files?.map((file: IFile, index: number) => {
             return (
               <FileItem
                 key={index}
                 fileName={file.fileName}
                 fileSize={file.fileSize}
-                action={file.action}
                 image={file.image}
                 status={file.status}
               />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -7,33 +7,50 @@ import Hr from '../Divider';
 import styles from './styles';
 import COLORS from '../../constants/colors';
 import {useDispatch, useSelector} from 'react-redux';
+import {ApplicationState} from '../../store';
+import {IFile} from '../../constants/interfaces';
+import {calculateUploadProbability} from '../../constants/utils';
 
 export default function Header() {
   const dispatch = useDispatch();
-  // @ts-ignore
-  const selector = useSelector(store => store.fileList);
+  const selector = useSelector((state: ApplicationState) => state.fileList);
 
-  const [files, setFiles] = useState(selector.initialUploadList);
-  const [sections, setSections] = useState(selector.sections);
+  const [files, setFiles] = useState(selector.list);
 
-  console.log(files);
-  console.log(sections);
+  const startUpload = (
+    nextFile: IFile = files[0],
+    nextUpList: IFile[] = files,
+  ) => {
+    const toUpload = files[0];
 
-  const startUpload = () => {
-    console.log(files);
-    console.log(sections);
-    /*  const files = selector.initialUploadList;
-    const {sections} = selector;
+    const updatedFileList = files;
+    updatedFileList.splice(0, 1);
 
-    const uploadingFile = files.shift();
-    uploadingFile.action = 'uploading';
-    uploadingFile.status = 'encrypting';
+    setFiles(updatedFileList);
 
-    const nextToUpload = sections[1];
-    nextToUpload.files = files;
+    /*  const success = calculateUploadProbability();*/
 
-    dispatch({type: 'UPLOAD', payload: files.shift()});
-    dispatch({type: 'FILL_NEXT_TO_UPLOAD', payload: nextToUpload});*/
+    dispatch({
+      type: 'FILL_NEXT_TO_UPLOAD',
+      payload: {
+        toUpload,
+        files,
+      },
+    });
+
+    /* if (success <= 0.75) {
+      dispatch({type: 'ADD_TO_COMPLETED', payload: toUpload});
+    } else {
+      dispatch({type: 'ADD_TO_INCOMPLETE', payload: toUpload});
+    }*/
+
+    if (files.length > 0) {
+      nextFile = files[0];
+      updatedFileList.splice(0, 1);
+      setFiles(updatedFileList);
+
+      startUpload(nextFile, nextUpList);
+    }
   };
 
   return (

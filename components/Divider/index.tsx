@@ -33,7 +33,7 @@ function Hr({
       <View
         style={[styles.side, {height: thickness, backgroundColor: lineColor}]}
       />
-      <Text
+      {/*<Text
         style={[
           {fontSize: fontSize},
           {paddingLeft: textPadding, paddingRight: textPadding},
@@ -43,7 +43,7 @@ function Hr({
       </Text>
       <View
         style={[styles.side, {height: thickness, backgroundColor: lineColor}]}
-      />
+      />*/}
     </View>
   );
 }

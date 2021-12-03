@@ -4,7 +4,7 @@ import {StyleSheet} from 'react-native';
 import Home from './screens/Home';
 import COLORS from './constants/colors';
 import {Provider} from 'react-redux';
-import store from './store/store';
+import {store} from './store';
 
 const App = () => {
   return (

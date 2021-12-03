@@ -1,9 +1,17 @@
-import React, {useState} from 'react';
-import {ActivityIndicator, Image, Text, View} from 'react-native';
+import React from 'react';
+import {
+  ActivityIndicator,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import styles from './styles';
 import COLORS from '../../constants/colors';
-import {TFile} from '../../store/types/types';
+import {IFile} from '../../constants/interfaces';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch} from 'react-redux';
+import cancelAction from '../../store/actions/cancelAction';
 
 /*
  * TODO
@@ -11,29 +19,23 @@ import {useDispatch} from 'react-redux';
  *  And if the upload is cancelled must be a red icon.
  * */
 
-export default function FileItem({
-  fileName,
-  fileSize,
-  action,
-  image,
-  status,
-}: TFile) {
-  const [state, setState] = useState(action);
-
+export default function FileItem(file: IFile) {
   const dispatch = useDispatch();
-
-  return (
-    <View style={styles.wrapper}>
-      <View style={styles.container}>
+  const fileStatus = () => {
+    if (status === 'waiting') {
+      return (
         <View>
-          <Image source={image} />
+          <ActivityIndicator
+            animating={true}
+            hidesWhenStopped={false}
+            size="small"
+            color={COLORS.LIGHT_GRAY}
+          />
+          <Text style={styles.loadingText}>{status}</Text>
         </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.fileName}>{fileName}</Text>
-          <Text style={styles.fileSize}>{fileSize}</Text>
-        </View>
-      </View>
-      <View>
+      );
+    } else if (status === 'uploading') {
+      return (
         <View>
           <ActivityIndicator
             animating={true}
@@ -43,7 +45,45 @@ export default function FileItem({
           />
           <Text style={styles.loadingText}>{status}</Text>
         </View>
+      );
+    } else if (status === 'cancelled') {
+      return (
+        <View>
+          <Ionicons name="reload-sharp" size={24} color={COLORS.RED} />
+          <Text style={styles.loadingText}>{status}</Text>
+        </View>
+      );
+    } else {
+      return (
+        <View>
+          <Ionicons name="check-mark-sharp" size={24} />
+          <Text style={styles.loadingText}>{status}</Text>
+        </View>
+      );
+    }
+  };
+
+  const {fileName, fileSize, image, status} = file;
+
+  const cancelUpload = (fileToCancel: IFile) =>
+    dispatch(cancelAction(fileToCancel));
+
+  return (
+    <View style={styles.wrapper}>
+      <TouchableOpacity onPress={() => cancelUpload(file)}>
+        <Ionicons style={styles.closeIcon} name="close-sharp" size={20} />
+      </TouchableOpacity>
+
+      <View style={styles.container}>
+        <View>
+          <Image source={image} />
+        </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.fileName}>{fileName}</Text>
+          <Text style={styles.fileSize}>{fileSize}</Text>
+        </View>
       </View>
+      <View>{fileStatus}</View>
     </View>
   );
 }

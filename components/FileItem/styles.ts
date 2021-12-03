@@ -31,6 +31,11 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: COLORS.GRAY,
   },
+  closeIcon: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+  },
 });
 
 export default styles;

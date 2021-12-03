@@ -1,4 +1,11 @@
 #File Uploader - Fire Kamp Interview
+File Uploader is a tool to easily manage your file uploading process.
+
+
+Installation:
+- npm install
+- npx run android
+- npx run ios
 
 Libraries Installed
 - "react": "17.0.2"
