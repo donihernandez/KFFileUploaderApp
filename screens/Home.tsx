@@ -3,10 +3,10 @@ import {View} from 'react-native';
 import Header from '../components/Header';
 import FileList from '../components/FileList';
 import {useSelector} from 'react-redux';
+import { ApplicationState } from '../store';
 
 export default function Home() {
-  // @ts-ignore
-  const fileList = useSelector(store => store.fileList.sections);
+  const fileList =useSelector((state: ApplicationState) => state.fileList);
 
   return (
     <View>

@@ -1,6 +1,27 @@
 import {Action, TFile} from '../types/types';
+import {ImageSourcePropType} from 'react-native';
 
-const initialUploadList: TFile[] = [
+interface IFile {
+  fileName: string;
+  fileSize: string;
+  image: ImageSourcePropType;
+  action: string;
+  status: string;
+}
+
+export interface IAction {
+  type: string;
+  payload?: any;
+};
+
+export interface IFileList {
+  title?: string;
+  files?: TFile[];
+  action?: string;
+  emptyText: string;
+};
+
+const initialUploadList: IFile[] = [
   {
     fileName: 'Birthday 2020.png',
     fileSize: '2MB',
@@ -70,7 +91,7 @@ const initialState = {
   ],
 };
 
-const fileList = (state = initialState, action: Action) => {
+const FileList = (state = initialState, action: Action) => {
   if (action.type === 'UPLOAD') {
     state = {
       ...state,
@@ -88,4 +109,4 @@ const fileList = (state = initialState, action: Action) => {
   return state;
 };
 
-export default fileList;
+export default FileList;

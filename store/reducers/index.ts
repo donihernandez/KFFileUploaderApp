@@ -1,8 +1,13 @@
-import {combineReducers} from 'redux';
-import fileList from './fileReducer';
+import { combineReducers } from 'redux';
+import FileList from './fileReducer';
 
-const appReducer = combineReducers({
-  fileList,
+const rootReducer = combineReducers({
+  fileList : FileList,
+  //some more reducer will come
 });
 
-export default appReducer;
+export type ApplicationState = ReturnType<typeof rootReducer>;
+
+export { rootReducer };
+
+
