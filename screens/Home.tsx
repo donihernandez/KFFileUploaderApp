@@ -1,10 +1,11 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
+import Header from '../components/Header';
 
 export default function Home() {
   return (
     <View>
-      <Text>Home Screen</Text>
+      <Header />
     </View>
   );
 }
