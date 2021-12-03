@@ -1,7 +1,9 @@
-export type File = {
+import {ImageSourcePropType} from 'react-native';
+
+export type TFile = {
   fileName: string;
   fileSize: string;
-  image: string;
+  image: ImageSourcePropType;
   action: string;
   status: string;
 };
@@ -11,4 +13,8 @@ export type Action = {
   payload?: any;
 };
 
-export type FileList = File[];
+export type TFileList = {
+  title: string;
+  files: TFile[];
+  action: string;
+};

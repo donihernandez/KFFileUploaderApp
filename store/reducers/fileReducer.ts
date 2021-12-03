@@ -1,6 +1,6 @@
-import {Action, FileList} from '../types/types';
+import {Action, TFileList} from '../types/types';
 
-const initialUploadList: FileList = [
+const initialUploadList: TFileList = [
   {
     fileName: 'Birthday 2020.png',
     fileSize: '2MB',

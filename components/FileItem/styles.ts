@@ -3,9 +3,12 @@ import COLORS from '../../constants/colors';
 
 const styles = StyleSheet.create({
   wrapper: {
+    padding: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
+    backgroundColor: '#F6F7FC',
+    marginBottom: 30,
   },
   container: {
     flexDirection: 'row',
@@ -21,6 +24,8 @@ const styles = StyleSheet.create({
   fileSize: {
     color: COLORS.GRAY,
     fontSize: 10,
+    fontFamily: 'Poppins-Regular',
+    fontWeight: '400',
   },
   loadingText: {
     fontSize: 10,
