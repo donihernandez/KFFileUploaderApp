@@ -3,6 +3,13 @@ import {ActivityIndicator, Image, Text, View} from 'react-native';
 import styles from './styles';
 import COLORS from '../../constants/colors';
 import {TFile} from '../../store/types/types';
+import {useDispatch} from 'react-redux';
+
+/*
+ * TODO
+ *  The icons must change depending on the state of the file. If the file is uploading must be a blue spinner. If it's waiting, must be gray and without animation.
+ *  And if the upload is cancelled must be a red icon.
+ * */
 
 export default function FileItem({
   fileName,
@@ -12,6 +19,8 @@ export default function FileItem({
   status,
 }: TFile) {
   const [state, setState] = useState(action);
+
+  const dispatch = useDispatch();
 
   return (
     <View style={styles.wrapper}>

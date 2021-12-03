@@ -1,6 +1,6 @@
-import {Action, TFileList} from '../types/types';
+import {Action, TFile} from '../types/types';
 
-const initialUploadList: TFileList = [
+const initialUploadList: TFile[] = [
   {
     fileName: 'Birthday 2020.png',
     fileSize: '2MB',
@@ -47,9 +47,27 @@ const initialUploadList: TFileList = [
 
 const initialState = {
   uploading: {},
-  nextUploadList: [initialUploadList],
-  completedList: [],
-  incompleteList: [],
+  initialUploadList,
+  sections: [
+    {
+      title: 'Uploading',
+      action: 'CANCEL UPLOAD',
+      files: [],
+      emptyText: '',
+    },
+    {
+      title: 'Next Up',
+      action: 'Cancel All',
+      files: [],
+      emptyText: '',
+    },
+    {
+      title: 'Completed',
+      action: 'Cancel All',
+      files: [],
+      emptyText: 'No file uploads completed yet.',
+    },
+  ],
 };
 
 const fileList = (state = initialState, action: Action) => {
@@ -63,7 +81,7 @@ const fileList = (state = initialState, action: Action) => {
   if (action.type === 'FILL_NEXT_TO_UPLOAD') {
     state = {
       ...state,
-      nextUploadList: action.payload,
+      sections: action.payload,
     };
   }
 

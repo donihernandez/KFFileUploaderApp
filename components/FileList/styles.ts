@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import COLORS from "../../constants/colors";
+import COLORS from '../../constants/colors';
 
 const styles = StyleSheet.create({
   container: {
@@ -32,6 +32,13 @@ const styles = StyleSheet.create({
   },
   fileList: {
     paddingHorizontal: 10,
+  },
+  emptyText: {
+    paddingTop: 20,
+    color: COLORS.GRAY,
+    fontFamily: 'Poppins-Regular',
+    fontSize: 10,
+    fontWeight: '400',
   },
 });
 

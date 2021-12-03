@@ -11,6 +11,7 @@ import COLORS from '../../constants/colors';
 import Hr from '../Divider';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {TFile, TFileList} from '../../store/types/types';
+import fileList from '../../store/reducers/fileReducer';
 
 /*
  * TODO
@@ -18,7 +19,7 @@ import {TFile, TFileList} from '../../store/types/types';
  * To do this task is necessary to create a TouchableOpacity component that executes the animation of toggling the accordion.
  * It's not hard to implement but it will take me some time.
  * */
-export default function FileList({title, action, files}: TFileList) {
+export default function FileList({title, action, files, emptyText}: TFileList) {
   return (
     <View style={styles.container}>
       <View style={styles.accordionContainer}>
@@ -35,20 +36,24 @@ export default function FileList({title, action, files}: TFileList) {
         </View>
       </View>
       <Hr lineColor={COLORS.LIGHT_GRAY} />
-      <View style={styles.fileList}>
-        {files.map((file: TFile, index: number) => {
-          return (
-            <FileItem
-              key={index}
-              fileName={file.fileName}
-              fileSize={file.fileSize}
-              action={file.action}
-              image={file.image}
-              status={file.status}
-            />
-          );
-        })}
-      </View>
+      {fileList.length > 0 ? (
+        <View style={styles.fileList}>
+          {files?.map((file: TFile, index: number) => {
+            return (
+              <FileItem
+                key={index}
+                fileName={file.fileName}
+                fileSize={file.fileSize}
+                action={file.action}
+                image={file.image}
+                status={file.status}
+              />
+            );
+          })}
+        </View>
+      ) : (
+        <Text style={styles.emptyText}>{emptyText}</Text>
+      )}
     </View>
   );
 }

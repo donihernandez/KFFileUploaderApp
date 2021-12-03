@@ -14,7 +14,8 @@ export type Action = {
 };
 
 export type TFileList = {
-  title: string;
-  files: TFile[];
-  action: string;
+  title?: string;
+  files?: TFile[];
+  action?: string;
+  emptyText: string;
 };

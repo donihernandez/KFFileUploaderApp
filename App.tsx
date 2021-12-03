@@ -3,13 +3,17 @@ import {SafeAreaView, StatusBar} from 'react-native';
 import {StyleSheet} from 'react-native';
 import Home from './screens/Home';
 import COLORS from './constants/colors';
+import {Provider} from 'react-redux';
+import store from './store/store';
 
 const App = () => {
   return (
-    <SafeAreaView style={styles.wrapper}>
-      <Home />
-      <StatusBar barStyle="default" />
-    </SafeAreaView>
+    <Provider store={store}>
+      <SafeAreaView style={styles.wrapper}>
+        <Home />
+        <StatusBar barStyle="default" />
+      </SafeAreaView>
+    </Provider>
   );
 };
 
