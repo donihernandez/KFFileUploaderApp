@@ -1,7 +1,7 @@
 import React from 'react';
-import {Image, Text, View} from 'react-native';
+import {ActivityIndicator, Image, Text, View} from 'react-native';
 import styles from './styles';
-import Loading from '../Loading';
+import COLORS from '../../constants/colors';
 
 export default function FileItem() {
   return (
@@ -18,7 +18,15 @@ export default function FileItem() {
         </View>
       </View>
       <View>
-        <Loading />
+        <View>
+          <ActivityIndicator
+            animating={true}
+            hidesWhenStopped={false}
+            size="small"
+            color={COLORS.BLUE}
+          />
+          <Text style={styles.loadingText}>Encrypting</Text>
+        </View>
       </View>
     </View>
   );

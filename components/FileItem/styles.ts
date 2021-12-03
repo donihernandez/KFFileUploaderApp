@@ -22,6 +22,10 @@ const styles = StyleSheet.create({
     color: COLORS.GRAY,
     fontSize: 10,
   },
+  loadingText: {
+    fontSize: 10,
+    color: COLORS.GRAY,
+  },
 });
 
 export default styles;
