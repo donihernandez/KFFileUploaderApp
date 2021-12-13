@@ -12,8 +12,6 @@ export default function Home() {
 
   const [fileSections, setFileSections] = useState(sections);
 
-  console.log(fileSections);
-
   useEffect(() => {
     setFileSections(sections);
   }, [sections]);

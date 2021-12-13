@@ -2,13 +2,19 @@ import {StyleSheet} from 'react-native';
 import COLORS from '../../constants/colors';
 
 const styles = StyleSheet.create({
+  listItem: {
+    marginTop: 10,
+    marginHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: COLORS.LIGHT_GRAY,
+    borderRadius: 20,
+  },
   wrapper: {
-    padding: 10,
+    paddingVertical: 14,
+    paddingHorizontal: 30,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#F6F7FC',
-    marginBottom: 30,
   },
   container: {
     flexDirection: 'row',
@@ -33,8 +39,9 @@ const styles = StyleSheet.create({
   },
   closeIcon: {
     position: 'absolute',
-    top: 10,
-    right: 10,
+    top: -6,
+    right: 5,
+    zIndex: 1000,
   },
 });
 

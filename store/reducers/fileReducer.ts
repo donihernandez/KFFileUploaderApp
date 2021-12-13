@@ -73,7 +73,7 @@ const initialState = {
 
 const FileList = (state = initialState, action: IAction) => {
   if (action.type === 'UPLOAD') {
-    state = {
+    return {
       ...state,
       uploading: action.payload,
     };
@@ -81,14 +81,16 @@ const FileList = (state = initialState, action: IAction) => {
 
   if (action.type === 'FILL_NEXT_TO_UPLOAD') {
     const fileSections: any = state.sections;
-    fileSections.nextUp.files = action.payload.files;
-    fileSections.uploading.files.push(action.payload.toUpload);
+    fileSections.nextUp.files = action.payload.fileList;
+    fileSections.uploading.files.push(action.payload.fileToUpload);
+
+    console.log(action.payload.fileToUpload);
 
     state = {
       ...state,
+      uploading: action.payload.fileToUpload,
       sections: fileSections,
     };
-
     console.log(state);
   }
 

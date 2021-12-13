@@ -6,8 +6,6 @@ import COLORS from '../../constants/colors';
 import Hr from '../Divider';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {IFile, IFileList} from '../../constants/interfaces';
-import cancelAction from '../../store/actions/cancelAction';
-import retryAction from '../../store/actions/retryAction';
 import {useDispatch} from 'react-redux';
 
 /*
@@ -21,18 +19,15 @@ export default function FileList(fileList: IFileList) {
 
   const dispatch = useDispatch();
 
-  const cancel = (fileToCancel: IFile) => dispatch(cancelAction(fileToCancel));
-  const retry = (fileToUpload: IFile) => dispatch(retryAction(fileToUpload));
-
   const handleActions = () => {
     if (action === 'CANCEL UPLOAD') {
       files.forEach(file => {
-        cancel(file);
+        console.log('Cancelling');
       });
     }
     if (action === 'RETRY All') {
       files.forEach(file => {
-        retry(file);
+        console.log('Retrying');
       });
     }
     if (action === 'DISMISS ALL') {
@@ -56,17 +51,18 @@ export default function FileList(fileList: IFileList) {
       <Hr lineColor={COLORS.LIGHT_GRAY} />
       {files.length > 0 ? (
         <View style={styles.fileList}>
-          {files?.map((file: IFile, index: number) => {
-            return (
-              <FileItem
-                key={index}
-                fileName={file.fileName}
-                fileSize={file.fileSize}
-                image={file.image}
-                status={file.status}
-              />
-            );
-          })}
+          {files &&
+            files?.map((file: IFile, index: number) => {
+              return (
+                <FileItem
+                  key={index}
+                  fileName={file.fileName}
+                  fileSize={file.fileSize}
+                  image={file.image}
+                  status={file.status}
+                />
+              );
+            })}
         </View>
       ) : (
         <Text style={styles.emptyText}>{emptyText}</Text>

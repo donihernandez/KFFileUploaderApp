@@ -8,49 +8,20 @@ import styles from './styles';
 import COLORS from '../../constants/colors';
 import {useDispatch, useSelector} from 'react-redux';
 import {ApplicationState} from '../../store';
-import {IFile} from '../../constants/interfaces';
-import {calculateUploadProbability} from '../../constants/utils';
 
 export default function Header() {
   const dispatch = useDispatch();
-  const selector = useSelector((state: ApplicationState) => state.fileList);
+  const files = useSelector((state: ApplicationState) => state.fileList.list);
 
-  const [files, setFiles] = useState(selector.list);
-
-  const startUpload = (
-    nextFile: IFile = files[0],
-    nextUpList: IFile[] = files,
-  ) => {
-    const toUpload = files[0];
-
-    const updatedFileList = files;
-    updatedFileList.splice(0, 1);
-
-    setFiles(updatedFileList);
-
-    /*  const success = calculateUploadProbability();*/
-
+  const startUpload = () => {
+    const fileToUpload = files.shift();
     dispatch({
       type: 'FILL_NEXT_TO_UPLOAD',
       payload: {
-        toUpload,
-        files,
+        fileToUpload: fileToUpload,
+        sections: files,
       },
     });
-
-    /* if (success <= 0.75) {
-      dispatch({type: 'ADD_TO_COMPLETED', payload: toUpload});
-    } else {
-      dispatch({type: 'ADD_TO_INCOMPLETE', payload: toUpload});
-    }*/
-
-    if (files.length > 0) {
-      nextFile = files[0];
-      updatedFileList.splice(0, 1);
-      setFiles(updatedFileList);
-
-      startUpload(nextFile, nextUpList);
-    }
   };
 
   return (
