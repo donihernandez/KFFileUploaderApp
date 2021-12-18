@@ -14,13 +14,9 @@ interface IHr {
 }
 
 function Hr({
-  fontSize,
   hrPadding,
   hrStyles = 0,
   lineColor = 'black',
-  text,
-  textPadding = 3,
-  textStyles,
   thickness = 1,
 }: IHr) {
   return (
@@ -33,17 +29,6 @@ function Hr({
       <View
         style={[styles.side, {height: thickness, backgroundColor: lineColor}]}
       />
-      {/*<Text
-        style={[
-          {fontSize: fontSize},
-          {paddingLeft: textPadding, paddingRight: textPadding},
-          textStyles,
-        ]}>
-        {text}
-      </Text>
-      <View
-        style={[styles.side, {height: thickness, backgroundColor: lineColor}]}
-      />*/}
     </View>
   );
 }

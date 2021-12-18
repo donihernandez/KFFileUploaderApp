@@ -6,6 +6,7 @@ export interface IAction {
 }
 
 export interface IFile {
+  id: number;
   fileName: string;
   fileSize: string;
   image: ImageSourcePropType;

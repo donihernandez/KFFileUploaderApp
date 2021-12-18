@@ -1,10 +1,9 @@
 export const calculateUploadProbability = () => {
-  let successProbability = 0;
-  const uploadTime = Math.floor(Math.random() * (6 - 5 + 1)) + 6;
+  const uploadTime = (Math.floor(Math.random() * (6 - 5 + 1)) + 5) * 1000;
 
-  setTimeout(() => {
-    successProbability = Math.random();
-  }, uploadTime);
-
-  return successProbability;
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(Math.random());
+    }, uploadTime);
+  });
 };
