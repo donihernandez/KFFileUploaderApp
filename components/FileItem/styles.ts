@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 10,
+    textTransform: 'capitalize',
     color: COLORS.GRAY,
   },
   closeIcon: {
@@ -42,6 +43,10 @@ const styles = StyleSheet.create({
     top: -6,
     right: 5,
     zIndex: 1000,
+  },
+  centered: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

@@ -11,25 +11,52 @@ import COLORS from '../../constants/colors';
 import {IFile} from '../../constants/interfaces';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch} from 'react-redux';
-import cancelAction from '../../store/actions/cancelAction';
-
-/*
- * TODO
- *  The icons must change depending on the state of the file. If the file is uploading must be a blue spinner. If it's waiting, must be gray and without animation.
- *  And if the upload is cancelled must be a red icon.
- * */
 
 export default function FileItem(file: IFile) {
   const dispatch = useDispatch();
 
   const {fileName, fileSize, image, status} = file;
 
-  const cancelUpload = (fileToCancel: IFile) =>
-    dispatch(cancelAction(fileToCancel));
+  const cancelUpload = () => {
+    let fileToCancel = Object.assign({}, file);
+    fileToCancel.status = 'cancelled';
+    if (file.status === 'encrypting') {
+      dispatch(
+        {
+        type: 'CANCEL_ON_UPLOAD',
+        payload: {
+          fileToCancel: fileToCancel,
+        },
+      });
+    } else if (file.status === 'waiting') {
+      file.status = 'cancelled';
+      dispatch({
+        type: 'CANCEL_ON_NEXT_UP',
+        payload: {
+          fileToCancel: fileToCancel,
+        },
+      });
+    } else if (file.status === 'completed') {
+      file.status = 'cancelled';
+      dispatch({
+        type: 'CANCEL_ON_COMPLETED',
+        payload: {
+          fileToCancel: fileToCancel,
+        },
+      });
+    } else {
+      dispatch({
+        type: 'CANCEL_ON_INCOMPLETE',
+        payload: {
+          fileToCancel: fileToCancel,
+        },
+      });
+    }
+  };
 
   return (
     <View style={styles.listItem}>
-      <TouchableOpacity onPress={() => cancelUpload(file)}>
+      <TouchableOpacity onPress={() => cancelUpload()}>
         <Ionicons style={styles.closeIcon} name="close-sharp" size={20} />
       </TouchableOpacity>
       <View style={styles.wrapper}>
@@ -57,7 +84,7 @@ interface IStatus {
 const Status = ({status}: IStatus) => {
   if (status === 'waiting') {
     return (
-      <View>
+      <View style={styles.centered}>
         <ActivityIndicator
           animating={true}
           hidesWhenStopped={false}
@@ -67,9 +94,9 @@ const Status = ({status}: IStatus) => {
         <Text style={styles.loadingText}>{status}</Text>
       </View>
     );
-  } else if (status === 'uploading') {
+  } else if (status === 'encrypting') {
     return (
-      <View>
+      <View style={styles.centered}>
         <ActivityIndicator
           animating={true}
           hidesWhenStopped={false}
@@ -81,15 +108,26 @@ const Status = ({status}: IStatus) => {
     );
   } else if (status === 'cancelled') {
     return (
-      <View>
+      <View style={styles.centered}>
+        <Ionicons name="reload-sharp" size={24} color={COLORS.RED} />
+        <Text style={styles.loadingText}>{status}</Text>
+      </View>
+    );
+  } else if (status === 'failed') {
+    return (
+      <View style={styles.centered}>
         <Ionicons name="reload-sharp" size={24} color={COLORS.RED} />
         <Text style={styles.loadingText}>{status}</Text>
       </View>
     );
   } else {
     return (
-      <View>
-        <Ionicons name="check-mark-sharp" size={24} />
+      <View style={styles.centered}>
+        <Ionicons
+          name="checkmark-circle-sharp"
+          size={24}
+          color={COLORS.GREEN}
+        />
         <Text style={styles.loadingText}>{status}</Text>
       </View>
     );

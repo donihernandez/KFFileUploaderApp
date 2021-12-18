@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -14,12 +14,16 @@ export default function Header() {
   const files = useSelector((state: ApplicationState) => state.fileList.list);
 
   const startUpload = () => {
+    files.forEach(file => {
+      file.status = 'waiting';
+    });
+
     const fileToUpload = files.shift();
     dispatch({
       type: 'FILL_NEXT_TO_UPLOAD',
       payload: {
         fileToUpload: fileToUpload,
-        sections: files,
+        nextUpList: files,
       },
     });
   };

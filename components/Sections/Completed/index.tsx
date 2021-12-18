@@ -1,39 +1,28 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, TouchableWithoutFeedback, View} from 'react-native';
-import styles from './styles';
-import FileItem from '../FileItem';
-import COLORS from '../../constants/colors';
-import Hr from '../Divider';
+import styles from '../styles/styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {IFile, IFileList} from '../../constants/interfaces';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {IFile} from '../../../constants/interfaces';
+import COLORS from '../../../constants/colors';
+import Hr from '../../Divider';
+import FileItem from '../../FileItem';
+import {ApplicationState} from '../../../store';
 
-/*
- * TODO
- * Implementation of an accordion component. I was researching looking for a typescript-friendly library without success.
- * To do this task is necessary to create a TouchableOpacity component that executes the animation of toggling the accordion.
- * It's not hard to implement but it will take me some time.
- * */
-export default function FileList(fileList: IFileList) {
-  const {title, action, files, emptyText} = fileList;
+export default function Completed() {
+  const selector = useSelector((state: ApplicationState) => state.fileList);
+  const [section, setSection] = useState(selector.completed);
+  const {title, action, files, emptyText} = section;
 
   const dispatch = useDispatch();
 
   const handleActions = () => {
-    if (action === 'CANCEL UPLOAD') {
-      files.forEach(file => {
-        console.log('Cancelling');
-      });
-    }
-    if (action === 'RETRY All') {
-      files.forEach(file => {
-        console.log('Retrying');
-      });
-    }
-    if (action === 'DISMISS ALL') {
-      dispatch({type: 'DISMISS_ALL', payload: null});
-    }
+    dispatch({type: 'DISMISS_ALL_COMPLETED', payload: null});
   };
+
+  useEffect(() => {
+    setSection(selector.completed);
+  }, [selector.completed]);
 
   return (
     <View style={styles.container}>
@@ -50,7 +39,7 @@ export default function FileList(fileList: IFileList) {
       </View>
       <Hr lineColor={COLORS.LIGHT_GRAY} />
       {files.length > 0 ? (
-        <View style={styles.fileList}>
+        <View>
           {files &&
             files?.map((file: IFile) => {
               return (
