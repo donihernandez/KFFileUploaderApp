@@ -16,6 +16,8 @@ export default function Uploading() {
   const [section, setSection] = useState(selector.uploading);
   const [nextUp] = useState(selector.nextUp);
   const {title, action, file, emptyText} = section;
+  const [isCancelling, setIsCancelling] = useState(selector.isCancelling);
+  const [expanded, setExpanded] = useState(false);
 
   const upload = useCallback(async () => {
     file.status = 'encrypting';
@@ -26,7 +28,7 @@ export default function Uploading() {
       },
     });
     let probabilities: any = await calculateUploadProbability();
-    if (probabilities) {
+    if (probabilities && !isCancelling) {
       if (probabilities <= 0.75) {
         file.status = 'completed';
         dispatch({
@@ -36,17 +38,12 @@ export default function Uploading() {
           },
         });
       } else {
-        file.status = 'failed';
-        dispatch({
-          type: 'EDIT_UPLOAD_FILE_STATUS',
-          payload: {
-            fileToUpload: file,
-          },
-        });
+        let fileToCancel = Object.assign({}, file);
+        fileToCancel.status = 'cancelled';
         dispatch({
           type: 'ADD_TO_INCOMPLETE',
           payload: {
-            fileToAddToInComplete: file,
+            fileToAddToInComplete: fileToCancel,
           },
         });
       }
@@ -60,14 +57,18 @@ export default function Uploading() {
         },
       });
     }
-  }, [dispatch, file]);
+  }, [dispatch, file, isCancelling, nextUp.files]);
 
   useEffect(() => {
     setSection(selector.uploading);
+    setIsCancelling(selector.isCancelling);
     if (file && file.fileName !== '') {
+      setExpanded(true);
       upload().then(() => console.log('Uploading task finished successfully!'));
+    } else {
+      setExpanded(false);
     }
-  }, [file, selector.uploading, upload]);
+  }, [file, selector.isCancelling, selector.uploading, upload]);
 
   const handleActions = () => {
     dispatch({
@@ -76,6 +77,16 @@ export default function Uploading() {
         fileToCancel: file,
       },
     });
+  };
+
+  const ShowFiles = () => {
+    return expanded ? (
+      <View>
+        <FileItem file={file} isCancelling={setIsCancelling} />
+      </View>
+    ) : (
+      <Text />
+    );
   };
 
   return (
@@ -88,20 +99,24 @@ export default function Uploading() {
           <TouchableWithoutFeedback onPress={() => handleActions()}>
             <Text style={styles.action}>{action}</Text>
           </TouchableWithoutFeedback>
-          <Ionicons name="chevron-up-sharp" size={24} />
+          {expanded ? (
+            <Ionicons
+              name="chevron-up-sharp"
+              size={24}
+              onPress={() => setExpanded(!expanded)}
+            />
+          ) : (
+            <Ionicons
+              name="chevron-down-sharp"
+              size={24}
+              onPress={() => setExpanded(!expanded)}
+            />
+          )}
         </View>
       </View>
       <Hr lineColor={COLORS.LIGHT_GRAY} />
       {file && file.fileName !== '' ? (
-        <View>
-          <FileItem
-            id={file.id}
-            fileName={file.fileName}
-            fileSize={file.fileSize}
-            image={file.image}
-            status={file.status}
-          />
-        </View>
+        <ShowFiles />
       ) : (
         <Text style={styles.emptyText}>{emptyText}</Text>
       )}
