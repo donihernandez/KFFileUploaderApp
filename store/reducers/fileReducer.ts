@@ -48,6 +48,7 @@ const initialUploadList: IFile[] = [
 
 const initialState = {
   list: initialUploadList,
+  isCancelling: false,
   uploading: {
     title: 'Uploading',
     action: 'CANCEL UPLOAD',
@@ -82,6 +83,13 @@ const initialState = {
 };
 
 const FileList = (state = initialState, action: IAction) => {
+  if (action.type === 'TOGGLE_CANCELLING') {
+    state = {
+      ...state,
+      isCancelling: !state.isCancelling,
+    };
+  }
+
   // UPLOAD ACTIONS
   if (action.type === 'FILL_NEXT_TO_UPLOAD') {
     const uploading = state.uploading;

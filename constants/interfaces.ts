@@ -12,10 +12,3 @@ export interface IFile {
   image: ImageSourcePropType;
   status: string;
 }
-
-export interface IFileList {
-  title: string;
-  files: IFile[];
-  action: string;
-  emptyText: string;
-}

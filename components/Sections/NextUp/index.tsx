@@ -14,6 +14,7 @@ export default function NextUp() {
   const selector = useSelector((state: ApplicationState) => state.fileList);
   const [section, setSection] = useState(selector.nextUp);
   const {title, action, files, emptyText} = section;
+  const [expanded, setExpanded] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -23,7 +24,25 @@ export default function NextUp() {
 
   useEffect(() => {
     setSection(selector.nextUp);
-  }, [selector.nextUp]);
+    if (section.files.length > 0) {
+      setExpanded(true);
+    } else {
+      setExpanded(false);
+    }
+  }, [section.files.length, selector.nextUp]);
+
+  const ShowFiles = () => {
+    return expanded ? (
+      <View>
+        {files &&
+          files?.map((file: IFile) => {
+            return <FileItem key={file.id} file={file} />;
+          })}
+      </View>
+    ) : (
+      <Text />
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -35,26 +54,24 @@ export default function NextUp() {
           <TouchableWithoutFeedback onPress={() => handleActions()}>
             <Text style={styles.action}>{action}</Text>
           </TouchableWithoutFeedback>
-          <Ionicons name="chevron-up-sharp" size={24} />
+          {expanded ? (
+            <Ionicons
+              name="chevron-up-sharp"
+              size={24}
+              onPress={() => setExpanded(!expanded)}
+            />
+          ) : (
+            <Ionicons
+              name="chevron-down-sharp"
+              size={24}
+              onPress={() => setExpanded(!expanded)}
+            />
+          )}
         </View>
       </View>
       <Hr lineColor={COLORS.LIGHT_GRAY} />
       {files.length > 0 ? (
-        <View>
-          {files &&
-            files?.map((file: IFile) => {
-              return (
-                <FileItem
-                  key={file.id}
-                  id={file.id}
-                  fileName={file.fileName}
-                  fileSize={file.fileSize}
-                  image={file.image}
-                  status={file.status}
-                />
-              );
-            })}
-        </View>
+        <ShowFiles />
       ) : (
         <Text style={styles.emptyText}>{emptyText}</Text>
       )}

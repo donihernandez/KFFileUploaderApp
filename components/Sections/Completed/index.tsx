@@ -13,6 +13,7 @@ export default function Completed() {
   const selector = useSelector((state: ApplicationState) => state.fileList);
   const [section, setSection] = useState(selector.completed);
   const {title, action, files, emptyText} = section;
+  const [expanded, setExpanded] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -22,8 +23,25 @@ export default function Completed() {
 
   useEffect(() => {
     setSection(selector.completed);
-  }, [selector.completed]);
+    if (section.files.length > 0) {
+      setExpanded(true);
+    } else {
+      setExpanded(false);
+    }
+  }, [section.files.length, selector.completed]);
 
+  const ShowFiles = () => {
+    return expanded ? (
+      <View>
+        {files &&
+          files?.map((file: IFile) => {
+            return <FileItem key={file.id} file={file} />;
+          })}
+      </View>
+    ) : (
+      <Text />
+    );
+  };
   return (
     <View style={styles.container}>
       <View style={styles.accordionContainer}>
@@ -34,26 +52,24 @@ export default function Completed() {
           <TouchableWithoutFeedback onPress={() => handleActions()}>
             <Text style={styles.action}>{action}</Text>
           </TouchableWithoutFeedback>
-          <Ionicons name="chevron-up-sharp" size={24} />
+          {expanded ? (
+            <Ionicons
+              name="chevron-up-sharp"
+              size={24}
+              onPress={() => setExpanded(!expanded)}
+            />
+          ) : (
+            <Ionicons
+              name="chevron-down-sharp"
+              size={24}
+              onPress={() => setExpanded(!expanded)}
+            />
+          )}
         </View>
       </View>
       <Hr lineColor={COLORS.LIGHT_GRAY} />
       {files.length > 0 ? (
-        <View>
-          {files &&
-            files?.map((file: IFile) => {
-              return (
-                <FileItem
-                  key={file.id}
-                  id={file.id}
-                  fileName={file.fileName}
-                  fileSize={file.fileSize}
-                  image={file.image}
-                  status={file.status}
-                />
-              );
-            })}
-        </View>
+        <ShowFiles />
       ) : (
         <Text style={styles.emptyText}>{emptyText}</Text>
       )}

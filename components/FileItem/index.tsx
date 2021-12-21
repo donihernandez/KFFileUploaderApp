@@ -12,17 +12,22 @@ import {IFile} from '../../constants/interfaces';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch} from 'react-redux';
 
-export default function FileItem(file: IFile) {
-  const dispatch = useDispatch();
+interface IProps {
+  file: IFile;
+  isCancelling?: any;
+}
 
+export default function FileItem(props: IProps) {
+  const dispatch = useDispatch();
+  const {file} = props;
   const {fileName, fileSize, image, status} = file;
 
   const cancelUpload = () => {
+    dispatch({type: 'TOGGLE_CANCELLING'});
     let fileToCancel = Object.assign({}, file);
     fileToCancel.status = 'cancelled';
     if (file.status === 'encrypting') {
-      dispatch(
-        {
+      dispatch({
         type: 'CANCEL_ON_UPLOAD',
         payload: {
           fileToCancel: fileToCancel,
