@@ -1,11 +1,13 @@
-#File Uploader - Fire Kamp Interview
+# File Uploader - Fire Kamp Interview
 File Uploader is a tool to easily manage your file uploading process.
 
+## Description
+It's a file upload simulator. It doesn't really upload anything but the idea was to improve my skills. It is made with React Native, Typescript and Redux.
 
-Installation:
-- npm install
-- npx run android
-- npx run ios
+Installation And Running Steps:
+- yarn install
+- yarn run android
+- yarn run ios
 
 Libraries Installed
 - "react": "17.0.2"
@@ -14,9 +16,6 @@ Libraries Installed
 - "react-redux": "^7.2.6"
 - "redux": "^4.1.2"
 - "redux-thunk": "^2.4.1"
-
-Considerations:
-The app is not finished yet. If I had the time I could finished the implementation of every feature. Even I could add the testing.
 
 
 Notes:
